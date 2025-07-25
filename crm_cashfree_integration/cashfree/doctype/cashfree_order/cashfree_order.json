@@ -1,0 +1,179 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-25 12:04:48.395696",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "order_id",
+  "currency",
+  "amount",
+  "payment_entry",
+  "column_break_epvx",
+  "order_status",
+  "payment_session_id",
+  "expiry_time",
+  "order_note",
+  "customer_details_section",
+  "customer_uid",
+  "customer",
+  "customer_name",
+  "column_break_dgxm",
+  "customer_phone",
+  "customer_email",
+  "amended_from",
+  "section_break_eloh",
+  "invoices",
+  "order_items"
+ ],
+ "fields": [
+  {
+   "fieldname": "order_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Order ID",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Amount",
+   "options": "order_currency",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "payment_entry",
+   "fieldtype": "Link",
+   "label": "Payment Entry",
+   "options": "Payment Entry"
+  },
+  {
+   "fieldname": "column_break_epvx",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "order_status",
+   "fieldtype": "Select",
+   "label": "Order Status",
+   "options": "\nActive\nPaid\nExpired"
+  },
+  {
+   "fieldname": "payment_session_id",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Payment Session ID",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fieldname": "expiry_time",
+   "fieldtype": "Datetime",
+   "label": "Expiry Time"
+  },
+  {
+   "fieldname": "order_note",
+   "fieldtype": "HTML",
+   "label": "Order Note"
+  },
+  {
+   "fieldname": "customer_details_section",
+   "fieldtype": "Section Break",
+   "label": "Customer Details"
+  },
+  {
+   "fieldname": "customer_uid",
+   "fieldtype": "Data",
+   "label": "Customer UID",
+   "read_only": 1
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "label": "Customer",
+   "options": "Customer"
+  },
+  {
+   "fieldname": "customer_name",
+   "fieldtype": "Data",
+   "label": "Customer Name"
+  },
+  {
+   "fieldname": "column_break_dgxm",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "customer_phone",
+   "fieldtype": "Data",
+   "label": "Customer Phone",
+   "options": "Phone"
+  },
+  {
+   "fieldname": "customer_email",
+   "fieldtype": "Data",
+   "label": "Customer Email",
+   "options": "Email"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Cashfree Order",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "section_break_eloh",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "invoices",
+   "fieldtype": "Table",
+   "hidden": 1,
+   "label": "Reference Invoices",
+   "options": "Cashfree Invoices"
+  },
+  {
+   "fieldname": "order_items",
+   "fieldtype": "JSON",
+   "hidden": 1,
+   "label": "Order Items"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-07-25 14:10:08.870033",
+ "modified_by": "Administrator",
+ "module": "Cashfree",
+ "name": "Cashfree Order",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

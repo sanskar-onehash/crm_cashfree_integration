@@ -1,0 +1,71 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-25 11:14:52.530780",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "enabled",
+  "app_id",
+  "secret_key",
+  "column_break_mriv",
+  "base_uri"
+ ],
+ "fields": [
+  {
+   "default": "0",
+   "fieldname": "enabled",
+   "fieldtype": "Check",
+   "label": "Enabled"
+  },
+  {
+   "depends_on": "enabled",
+   "fieldname": "app_id",
+   "fieldtype": "Data",
+   "label": "App ID",
+   "mandatory_depends_on": "enabled"
+  },
+  {
+   "depends_on": "enabled",
+   "fieldname": "secret_key",
+   "fieldtype": "Password",
+   "label": "Secret Key",
+   "mandatory_depends_on": "enabled"
+  },
+  {
+   "fieldname": "column_break_mriv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "https://sandbox.cashfree.com/pg",
+   "depends_on": "enabled",
+   "fieldname": "base_uri",
+   "fieldtype": "Data",
+   "label": "Base Uri",
+   "mandatory_depends_on": "enabled"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2025-07-25 14:10:24.666972",
+ "modified_by": "Administrator",
+ "module": "Cashfree",
+ "name": "Cashfree Integration",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
