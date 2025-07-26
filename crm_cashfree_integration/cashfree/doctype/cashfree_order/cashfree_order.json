@@ -14,17 +14,14 @@
   "payment_session_id",
   "expiry_time",
   "order_note",
-  "customer_details_section",
-  "customer_uid",
-  "customer",
-  "customer_name",
-  "column_break_dgxm",
-  "customer_phone",
-  "customer_email",
   "amended_from",
+  "customer_details_section",
+  "customer",
+  "column_break_dgxm",
+  "customer_uid",
   "section_break_eloh",
   "invoices",
-  "order_items"
+  "order_details"
  ],
  "fields": [
   {
@@ -32,8 +29,7 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "Order ID",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "currency",
@@ -55,7 +51,8 @@
    "fieldname": "payment_entry",
    "fieldtype": "Link",
    "label": "Payment Entry",
-   "options": "Payment Entry"
+   "options": "Payment Entry",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_epvx",
@@ -65,25 +62,26 @@
    "fieldname": "order_status",
    "fieldtype": "Select",
    "label": "Order Status",
-   "options": "\nActive\nPaid\nExpired"
+   "options": "\nActive\nPaid\nExpired",
+   "read_only": 1
   },
   {
    "fieldname": "payment_session_id",
-   "fieldtype": "Data",
-   "in_list_view": 1,
+   "fieldtype": "Small Text",
    "label": "Payment Session ID",
-   "read_only": 1,
-   "reqd": 1
+   "read_only": 1
   },
   {
    "fieldname": "expiry_time",
    "fieldtype": "Datetime",
-   "label": "Expiry Time"
+   "label": "Expiry Time",
+   "read_only": 1
   },
   {
    "fieldname": "order_note",
    "fieldtype": "HTML",
-   "label": "Order Note"
+   "label": "Order Note",
+   "read_only": 1
   },
   {
    "fieldname": "customer_details_section",
@@ -100,28 +98,12 @@
    "fieldname": "customer",
    "fieldtype": "Link",
    "label": "Customer",
-   "options": "Customer"
-  },
-  {
-   "fieldname": "customer_name",
-   "fieldtype": "Data",
-   "label": "Customer Name"
+   "options": "Customer",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_dgxm",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "customer_phone",
-   "fieldtype": "Data",
-   "label": "Customer Phone",
-   "options": "Phone"
-  },
-  {
-   "fieldname": "customer_email",
-   "fieldtype": "Data",
-   "label": "Customer Email",
-   "options": "Email"
   },
   {
    "fieldname": "amended_from",
@@ -142,19 +124,21 @@
    "fieldtype": "Table",
    "hidden": 1,
    "label": "Reference Invoices",
-   "options": "Cashfree Invoices"
+   "options": "Cashfree Invoices",
+   "read_only": 1
   },
   {
-   "fieldname": "order_items",
+   "fieldname": "order_details",
    "fieldtype": "JSON",
    "hidden": 1,
-   "label": "Order Items"
+   "label": "Order Details",
+   "read_only": 1
   }
  ],
- "index_web_pages_for_search": 1,
+ "in_create": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-07-25 14:10:08.870033",
+ "modified": "2025-07-26 14:02:29.424382",
  "modified_by": "Administrator",
  "module": "Cashfree",
  "name": "Cashfree Order",
