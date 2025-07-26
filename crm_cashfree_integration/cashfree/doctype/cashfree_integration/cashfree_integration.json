@@ -5,11 +5,14 @@
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
+  "section_break_kiwu",
   "enabled",
   "app_id",
   "secret_key",
   "column_break_mriv",
-  "base_uri"
+  "base_uri",
+  "section_break_edyw",
+  "help_html"
  ],
  "fields": [
   {
@@ -43,12 +46,26 @@
    "fieldtype": "Data",
    "label": "Base Uri",
    "mandatory_depends_on": "enabled"
+  },
+  {
+   "fieldname": "section_break_kiwu",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_edyw",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "enabled",
+   "fieldname": "help_html",
+   "fieldtype": "HTML",
+   "label": "Help HTML"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2025-07-25 14:10:24.666972",
+ "modified": "2025-07-26 16:35:47.029654",
  "modified_by": "Administrator",
  "module": "Cashfree",
  "name": "Cashfree Integration",

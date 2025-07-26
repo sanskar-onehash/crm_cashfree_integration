@@ -5,7 +5,7 @@ import frappe
 from frappe.model.document import Document
 from frappe.utils import get_datetime
 from crm_cashfree_integration.cashfree import utils
-from crm_cashfree_integration.cashfree.integration.api import create_cf_order
+from crm_cashfree_integration.cashfree.integration import api, config
 from datetime import datetime
 
 ORDER_STATUS_MAP = {"ACTIVE": "Active", "PAID": "Paid", "EXPIRED": "Expired"}
@@ -26,6 +26,10 @@ def create_order(
     order_meta=None,
     order_expiry_time=None,
 ):
+    customer_details = utils.ensure_dict(customer_details)
+    invoices = utils.ensure_dict(invoices)
+    order_meta = utils.ensure_dict(order_meta)
+
     if not customer_details:
         frappe.throw("customer_details is required")
     elif not customer_details.get("customer_id") or not customer_details.get(
@@ -58,7 +62,13 @@ def create_order(
         invoices=invoices,
     )
 
-    return order_doc.name
+    return {
+        "amount": order_doc.get("amount"),
+        "currency": order_doc.get("currency"),
+        "docname": order_doc.name,
+        "payment_session_id": order_doc.get("payment_session_id"),
+        "client_script_src": config.CLIENT_SCRIPT_SRC,
+    }
 
 
 def create_cashfree_order(
@@ -89,7 +99,7 @@ def create_cashfree_order(
         }
     ).insert()
 
-    cf_response = create_cf_order(
+    cf_response = api.create_cf_order(
         order_currency=currency,
         order_amount=amount,
         order_id=order.name,
