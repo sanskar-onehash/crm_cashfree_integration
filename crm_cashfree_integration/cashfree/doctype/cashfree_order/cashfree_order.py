@@ -16,6 +16,8 @@ class CashfreeOrder(Document):
         if not self.get("payment_entry"):
             frappe.throw("Payment Entry is required to submit CF Order")
 
+        self.update(({"order_status": ORDER_STATUS_MAP["PAID"]}))
+
 
 @frappe.whitelist()
 def create_order(
@@ -135,6 +137,9 @@ def parse_invoices(
         invoice_type = invoice.get("invoice_type", "")
         invoice_id = invoice.get("invoice_id", "")
         invoice_doc = frappe.get_doc(invoice_type, invoice_id)
+        if invoice_doc.docstatus != 1:
+            frappe.throw(f"Invoice {invoice_type}:{invoice_id} is not submitted.")
+
         invoice_customer = utils.get_or_throw(invoice_doc, "customer")
         invoice_currency = utils.get_or_throw(invoice_doc, "currency")
         invoice_amount = utils.get_or_throw(invoice_doc, "grand_total")

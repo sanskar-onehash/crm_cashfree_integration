@@ -11,8 +11,10 @@
   "payment_entry",
   "column_break_epvx",
   "order_status",
+  "payment_id",
   "payment_session_id",
   "expiry_time",
+  "international_payment",
   "order_note",
   "amended_from",
   "customer_details_section",
@@ -133,12 +135,25 @@
    "hidden": 1,
    "label": "Order Details",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "international_payment",
+   "fieldtype": "Check",
+   "label": "International Payment",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payment_id",
+   "fieldtype": "Data",
+   "label": "Payment ID",
+   "read_only": 1
   }
  ],
  "in_create": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-07-26 14:02:29.424382",
+ "modified": "2025-07-26 17:29:01.616457",
  "modified_by": "Administrator",
  "module": "Cashfree",
  "name": "Cashfree Order",
