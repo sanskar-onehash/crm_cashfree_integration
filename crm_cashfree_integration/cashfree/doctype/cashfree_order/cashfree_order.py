@@ -7,6 +7,7 @@ from frappe.utils import get_datetime
 from crm_cashfree_integration.cashfree import utils
 from crm_cashfree_integration.cashfree.integration import api, config
 from datetime import datetime
+from erpnext import get_default_company
 
 ORDER_STATUS_MAP = {"ACTIVE": "Active", "PAID": "Paid", "EXPIRED": "Expired"}
 
@@ -43,6 +44,7 @@ def create_order(
     order_meta = order_meta or {}
     invoices = invoices or []
     order_items = []
+    company = None
 
     if invoices:
         parsed = parse_invoices(invoices, order_currency, customer_id)
@@ -50,13 +52,18 @@ def create_order(
         order_currency = parsed["currency"]
         invoices = parsed["invoices"]
         order_items = parsed["order_items"]
+        company = parsed["company"]
     elif not order_amount:
         frappe.throw("Either invoices or order_amount must be provided.")
+
+    if not company:
+        company = get_default_company()
 
     order_doc = create_cashfree_order(
         currency=order_currency,
         amount=order_amount,
         customer=customer_id,
+        company=company,
         customer_details=customer_details,
         order_meta=order_meta,
         order_items=order_items,
@@ -77,6 +84,7 @@ def create_cashfree_order(
     currency: str,
     amount: float,
     customer: str,
+    company: str,
     customer_details: dict,
     order_meta: dict = {},
     order_items: list = [],
@@ -98,6 +106,7 @@ def create_cashfree_order(
             ),
             "expiry_time": order_expiry_time,
             "invoices": invoices,
+            "company": company,
         }
     ).insert()
 
@@ -130,6 +139,7 @@ def parse_invoices(
     customer_id: str | None = None,
 ):
     amount = 0
+    company = None
     order_items = []
     cf_invoices = []
 
@@ -143,17 +153,22 @@ def parse_invoices(
         invoice_customer = utils.get_or_throw(invoice_doc, "customer")
         invoice_currency = utils.get_or_throw(invoice_doc, "currency")
         invoice_amount = utils.get_or_throw(invoice_doc, "grand_total")
+        invoice_company = utils.get_or_throw(invoice_doc, "company")
 
         amount += invoice_amount
         if not customer_id:
             customer_id = invoice_customer
         if not currency:
             currency = invoice_currency
+        if not company:
+            company = invoice_company
 
         if customer_id != invoice_currency:
             frappe.throw("Customer doesn't matches across invoices.")
-        elif currency != invoice_currency:
+        if currency != invoice_currency:
             frappe.throw("Currency doesn't matches across invoices.")
+        if company != invoice_company:
+            frappe.throw("Company doesn't matches across invoices.")
 
         for item in invoice_doc.get("items") or []:
             order_items.append(
@@ -171,4 +186,5 @@ def parse_invoices(
         "customer": customer_id,
         "invoices": cf_invoices,
         "order_items": order_items,
+        "company": company,
     }

@@ -32,10 +32,10 @@ def make_post_request(
     return res
 
 
-def handle_order_success():
+def handle_order_success(data, event_time, type):
     try:
-        order = frappe.form_dict.get("order", {})
-        payment = frappe.form_dict.get("payment", {})
+        order = data.get("order", {})
+        payment = data.get("payment", {})
 
         order_doc = frappe.get_doc("Cashfree Order", order.get("order_id"))
         if order_doc.docstatus == 1:
@@ -67,6 +67,7 @@ def create_order_pe(order_doc):
             "party_type": "Customer",
             "party": order_doc.get("customer"),
             "paid_amount": order_doc.get("amount"),
+            "company": order_doc.get("company"),
         }
     )
     for invoice in order_doc.get("invoices") or []:
