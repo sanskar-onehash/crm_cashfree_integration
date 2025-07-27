@@ -10,6 +10,7 @@
   "amount",
   "payment_entry",
   "company",
+  "mode_of_payment",
   "column_break_epvx",
   "order_status",
   "payment_id",
@@ -155,6 +156,13 @@
    "fieldtype": "Link",
    "label": "Company",
    "options": "Company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "mode_of_payment",
+   "fieldtype": "Link",
+   "label": "Mode Of Payment",
+   "options": "Mode of Payment",
    "read_only": 1
   }
  ],
