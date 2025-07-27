@@ -2,6 +2,7 @@ import frappe
 import requests
 
 from crm_cashfree_integration.cashfree.integration import auth, utils
+from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
 
 
 def make_get_request(endpoint, params=None, raise_for_status=False):
@@ -34,14 +35,16 @@ def make_post_request(
 
 def handle_order_success(data, event_time, type):
     try:
+        frappe.set_user("Administrator")
         order = data.get("order", {})
         payment = data.get("payment", {})
 
         order_doc = frappe.get_doc("Cashfree Order", order.get("order_id"))
-        if order_doc.docstatus == 1:
+        if order_doc.docstatus != 0:
             # Payment Entry is already created
             return
 
+        order_doc.db_set("mode_of_payment", "Cash")
         pe = create_order_pe(order_doc).insert()
 
         order_doc.update(
@@ -61,15 +64,17 @@ def handle_order_success(data, event_time, type):
 
 
 def create_order_pe(order_doc):
-    pe = frappe.get_doc(
-        {
-            "doctype": "Payment Entry",
-            "party_type": "Customer",
-            "party": order_doc.get("customer"),
-            "paid_amount": order_doc.get("amount"),
-            "company": order_doc.get("company"),
-        }
+    pe = get_payment_entry(
+        order_doc.doctype,
+        order_doc.name,
+        party_amount=order_doc.amount,
+        party_type="Customer",
+        reference_date=frappe.utils.getdate(),
+        ignore_permissions=True,
     )
+
+    # get_payment_entry sets Cashfree Order as reference
+    pe.update({"references": [], "docstatus": 1})
     for invoice in order_doc.get("invoices") or []:
         pe.append(
             "references",
@@ -78,5 +83,6 @@ def create_order_pe(order_doc):
                 "reference_name": invoice.get("invoice"),
             },
         )
+
     pe.validate()
     return pe
