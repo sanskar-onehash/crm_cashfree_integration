@@ -14,6 +14,7 @@
   "mode_of_payment",
   "column_break_epvx",
   "order_status",
+  "payment_status",
   "payment_id",
   "payment_session_id",
   "expiry_time",
@@ -173,12 +174,17 @@
    "label": "Mode Of Payment",
    "options": "Mode of Payment",
    "read_only": 1
+  },
+  {
+   "fieldname": "payment_status",
+   "fieldtype": "Select",
+   "label": "Payment Status",
+   "options": "\nSuccess\nFailed\nUser Dropped"
   }
  ],
  "in_create": 1,
- "is_submittable": 1,
  "links": [],
- "modified": "2025-07-28 03:43:00.100779",
+ "modified": "2025-07-28 05:15:15.848513",
  "modified_by": "Administrator",
  "module": "Cashfree",
  "name": "Cashfree Order",

@@ -40,11 +40,11 @@ def handle_order_success(data, event_time, type):
         payment = data.get("payment", {})
 
         order_doc = frappe.get_doc("Cashfree Order", order.get("order_id"))
-        if order_doc.docstatus != 0:
+        if order_doc.get("payment_status"):
             # Payment Entry is already created
             return
 
-        order_doc.db_set("mode_of_payment", "Cash")
+        order_doc.db_set({"mode_of_payment": "Cash", "payment_status": "Success"})
         pe = create_order_pe(order_doc).insert()
 
         order_doc.update(
@@ -57,10 +57,23 @@ def handle_order_success(data, event_time, type):
             }
         )
         order_doc = order_doc.save()
-        order_doc.submit()
     except Exception as e:
         frappe.log_error("webhook", e)
     return "success"
+
+
+def handle_order_failed(data, event_time, type):
+    frappe.set_user("Administrator")
+
+    order = data.get("order", {})
+    order_doc = frappe.get_doc("Cashfree Order", order.get("order_id"))
+
+    payment_status = "Failed"
+    if (data.get("payment") or {}).get("payment_status") == "USER_DROPPED":
+        payment_status = "User Dropped"
+
+    order_doc.update({"payment_status": payment_status})
+    order_doc.save()
 
 
 def create_order_pe(order_doc):
