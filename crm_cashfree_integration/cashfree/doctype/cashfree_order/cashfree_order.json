@@ -178,13 +178,14 @@
   {
    "fieldname": "payment_status",
    "fieldtype": "Select",
+   "in_standard_filter": 1,
    "label": "Payment Status",
    "options": "\nSuccess\nFailed\nUser Dropped"
   }
  ],
  "in_create": 1,
  "links": [],
- "modified": "2025-07-28 05:15:15.848513",
+ "modified": "2025-07-28 05:33:49.186321",
  "modified_by": "Administrator",
  "module": "Cashfree",
  "name": "Cashfree Order",
