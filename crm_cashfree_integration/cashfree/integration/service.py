@@ -45,7 +45,7 @@ def handle_order_success(data, event_time, type):
             return
 
         order_doc.db_set({"mode_of_payment": "Cash", "payment_status": "Success"})
-        pe = create_order_pe(order_doc).insert()
+        pe = create_order_pe(order_doc).save()
 
         order_doc.update(
             {
@@ -82,6 +82,7 @@ def create_order_pe(order_doc):
         order_doc.name,
         party_amount=order_doc.amount,
         party_type="Customer",
+        payment_type="Receive",
         reference_date=frappe.utils.getdate(),
         ignore_permissions=True,
     )
@@ -89,13 +90,16 @@ def create_order_pe(order_doc):
     # get_payment_entry sets Cashfree Order as reference
     pe.update({"references": [], "docstatus": 1})
     for invoice in order_doc.get("invoices") or []:
+        invoice_type = invoice.get("invoice_type")
+        invoice_name = invoice.get("invoice")
+        invoice_amount = frappe.db.get_value(invoice_type, invoice_name, "grand_total")
         pe.append(
             "references",
             {
-                "reference_doctype": invoice.get("invoice_type"),
-                "reference_name": invoice.get("invoice"),
+                "reference_doctype": invoice_type,
+                "reference_name": invoice_name,
+                "allocated_amount": invoice_amount,
             },
         )
 
-    pe.validate()
     return pe
