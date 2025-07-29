@@ -163,7 +163,7 @@ def parse_invoices(
         if not company:
             company = invoice_company
 
-        if customer_id != invoice_currency:
+        if customer_id != invoice_customer:
             frappe.throw("Customer doesn't matches across invoices.")
         if currency != invoice_currency:
             frappe.throw("Currency doesn't matches across invoices.")
