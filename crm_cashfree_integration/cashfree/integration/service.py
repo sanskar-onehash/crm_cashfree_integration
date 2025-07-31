@@ -57,6 +57,13 @@ def handle_order_success(data, event_time, type):
             }
         )
         order_doc = order_doc.save()
+        if order_doc.get("reference_fieldname"):
+            frappe.db.set_value(
+                order_doc.get("reference_type"),
+                order_doc.get("reference_doc"),
+                order_doc.get("reference_fieldname"),
+                pe.name,
+            )
     except Exception as e:
         frappe.log_error("webhook", e)
     return "success"

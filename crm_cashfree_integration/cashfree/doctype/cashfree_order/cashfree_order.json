@@ -12,9 +12,12 @@
   "company",
   "company_currency",
   "mode_of_payment",
+  "reference_type",
+  "reference_doc",
+  "reference_fieldname",
   "column_break_epvx",
   "order_status",
-  "payment_status",
+  "status",
   "payment_id",
   "payment_session_id",
   "expiry_time",
@@ -176,16 +179,38 @@
    "read_only": 1
   },
   {
-   "fieldname": "payment_status",
+   "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Payment Status",
    "options": "\nSuccess\nFailed\nUser Dropped"
+  },
+  {
+   "fieldname": "reference_type",
+   "fieldtype": "Link",
+   "label": "Reference Type",
+   "options": "DocType",
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "reference_doc",
+   "fieldtype": "Dynamic Link",
+   "label": "Reference Doc",
+   "options": "reference_type",
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "reference_fieldname",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Reference Fieldname",
+   "set_only_once": 1
   }
  ],
  "in_create": 1,
  "links": [],
- "modified": "2025-07-28 05:33:49.186321",
+ "modified": "2025-07-31 10:56:42.474343",
  "modified_by": "Administrator",
  "module": "Cashfree",
  "name": "Cashfree Order",

@@ -28,6 +28,9 @@ def create_order(
     invoices=None,
     order_meta=None,
     order_expiry_time=None,
+    reference_doctype=None,
+    reference_name=None,
+    reference_fieldname=None,
 ):
     customer_details = utils.ensure_dict(customer_details)
     invoices = utils.ensure_dict(invoices)
@@ -69,6 +72,9 @@ def create_order(
         order_items=order_items,
         order_expiry_time=order_expiry_time,
         invoices=invoices,
+        reference_doctype=reference_doctype,
+        reference_name=reference_name,
+        reference_fieldname=reference_fieldname,
     )
 
     return {
@@ -90,6 +96,9 @@ def create_cashfree_order(
     order_items: list = [],
     order_expiry_time: datetime | None = None,
     invoices: list[dict] = [],
+    reference_doctype=None,
+    reference_name=None,
+    reference_fieldname=None,
 ):
     order = frappe.get_doc(
         {
@@ -107,6 +116,10 @@ def create_cashfree_order(
             "expiry_time": order_expiry_time,
             "invoices": invoices,
             "company": company,
+            "payment_type": "Receive",
+            "reference_type": reference_doctype,
+            "reference_doc": reference_name,
+            "reference_fieldname": reference_fieldname,
         }
     ).insert()
 
