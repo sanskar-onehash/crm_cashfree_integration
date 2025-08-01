@@ -23,7 +23,6 @@ def verify_webhook(fn):
     def wrapper(*args, **kwargs):
         webhook_version = frappe.request.headers["X-Webhook-Version"]
         if not webhook_version or webhook_version != INTEGRATION_VERSION:
-            frappe.log_error("invalid_webhook_version", webhook_version)
             frappe.throw("Invalid X-Webhook-Version received.")
 
         cashfree_enabled = frappe.db.get_single_value("Cashfree Integration", "enabled")
@@ -34,7 +33,7 @@ def verify_webhook(fn):
         cashfree_secret_key = frappe.db.get_single_value(
             "Cashfree Integration", "secret_key"
         )
-        verifyCashfreesSignature(cashfree_secret_key)
+        verifyCashfreeSignature(cashfree_secret_key)
 
         kwargs.pop("cmd")
         fn(*args, **kwargs)
@@ -42,7 +41,7 @@ def verify_webhook(fn):
     return wrapper
 
 
-def verifyCashfreesSignature(secret_key):
+def verifyCashfreeSignature(secret_key):
     raw_body = frappe.request.data.decode("utf-8")
     timestamp = frappe.request.headers["X-Webhook-Timestamp"]
     signature = frappe.request.headers["X-Webhook-Signature"]

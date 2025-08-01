@@ -34,38 +34,35 @@ def make_post_request(
 
 
 def handle_order_success(data, event_time, type):
-    try:
-        frappe.set_user("Administrator")
-        order = data.get("order", {})
-        payment = data.get("payment", {})
+    frappe.set_user("Administrator")
+    order = data.get("order", {})
+    payment = data.get("payment", {})
 
-        order_doc = frappe.get_doc("Cashfree Order", order.get("order_id"))
-        if order_doc.get("payment_status"):
-            # Payment Entry is already created
-            return
+    order_doc = frappe.get_doc("Cashfree Order", order.get("order_id"))
+    if order_doc.get("payment_status"):
+        # Payment Entry is already created
+        return
 
-        order_doc.db_set({"mode_of_payment": "Cash", "payment_status": "Success"})
-        pe = create_order_pe(order_doc).save()
+    order_doc.db_set({"mode_of_payment": "Cash", "payment_status": "Success"})
+    pe = create_order_pe(order_doc).save()
 
-        order_doc.update(
-            {
-                "payment_id": payment.get("cf_payment_id"),
-                "international_payment": payment.get("international_payment").get(
-                    "international"
-                ),
-                "payment_entry": pe.name,
-            }
+    order_doc.update(
+        {
+            "payment_id": payment.get("cf_payment_id"),
+            "international_payment": payment.get("international_payment").get(
+                "international"
+            ),
+            "payment_entry": pe.name,
+        }
+    )
+    order_doc = order_doc.save()
+    if order_doc.get("reference_fieldname"):
+        frappe.db.set_value(
+            order_doc.get("reference_type"),
+            order_doc.get("reference_doc"),
+            order_doc.get("reference_fieldname"),
+            pe.name,
         )
-        order_doc = order_doc.save()
-        if order_doc.get("reference_fieldname"):
-            frappe.db.set_value(
-                order_doc.get("reference_type"),
-                order_doc.get("reference_doc"),
-                order_doc.get("reference_fieldname"),
-                pe.name,
-            )
-    except Exception as e:
-        frappe.log_error("webhook", e)
     return "success"
 
 
