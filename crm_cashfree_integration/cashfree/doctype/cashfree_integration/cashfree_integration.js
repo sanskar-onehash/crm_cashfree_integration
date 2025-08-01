@@ -103,6 +103,9 @@ frappe.ui.form.on("Cashfree Integration", {
   orderInvoices,
   orderMeta,
   orderExpiryTime,
+  referenceDoctype,
+  referenceName,
+  referenceFieldname,
   loadCashfree = true,
 ) {
   const cashfreeOrder = await createCashfreeOrder(
@@ -112,6 +115,9 @@ frappe.ui.form.on("Cashfree Integration", {
     orderInvoices,
     orderMeta,
     orderExpiryTime,
+    referenceDoctype,
+    referenceName,
+    referenceFieldname,
     loadCashfree,
   );
   const cashfree = Cashfree({
@@ -121,20 +127,23 @@ frappe.ui.form.on("Cashfree Integration", {
     paymentSessionId: cashfreeOrder.payment_session_id,
     redirectTarget: "_modal",
   };
-  cashfree.checkout(checkoutOptions).then((result) => {
-    if (result.error) {
-      console.log(
-        "User has closed the popup or there is some payment error, Check for Payment Status",
-      );
-      console.log(result.error);
-    }
-    if (result.redirect) {
-      console.log("Payment will be redirected");
-    }
-    if (result.paymentDetails) {
-      console.log("Payment has been completed, Check for Payment Status");
-      console.log(result.paymentDetails.paymentMessage);
-    }
+  return new Promise((resolve, reject) => {
+    cashfree.checkout(checkoutOptions).then((result) => {
+      if (result.error) {
+        console.log(
+          "User has closed the popup or there is some payment error, Check for Payment Status",
+        );
+        reject(result.error);
+      }
+      if (result.redirect) {
+        console.log("Payment will be redirected");
+      }
+      if (result.paymentDetails) {
+        console.log("Payment has been completed, Check for Payment Status");
+        console.log(result.paymentDetails.paymentMessage);
+        resolve();
+      }
+    });
   });
 }
 
@@ -145,6 +154,9 @@ async function createCashfreeOrder(
   orderInvoices,
   orderMeta,
   orderExpiryTime,
+  referenceDoctype,
+  referenceName,
+  referenceFieldname,
   loadCashfree = true,
 ) {
   return new Promise((resolve, reject) => {
@@ -158,6 +170,9 @@ async function createCashfreeOrder(
         invoices: orderInvoices,
         order_meta: orderMeta,
         order_expiry_time: orderExpiryTime,
+        reference_doctype: (referenceDoctype = referenceDoctype),
+        reference_name: (referenceName = referenceName),
+        reference_fieldname: (referenceFieldname = referenceFieldname),
       },
       callback: async function (res) {
         if (res.message && res.message.payment_session_id) {
