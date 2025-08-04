@@ -36,3 +36,11 @@ def prepare_customer_details(customer_details: dict):
 
     customer_details["customer_id"] = customer_id
     return customer_details
+
+
+def remove_empty_values(obj: dict):
+    new_obj = {}
+    for key in obj:
+        if obj[key]:
+            new_obj[key] = obj[key]
+    return new_obj

@@ -12,17 +12,20 @@ def create_cf_order(
 ):
     if order_expiry_time:
         order_expiry_time = utils.datetime_to_iso(order_expiry_time)
-
-    res = service.make_post_request(
-        "orders",
-        json={
+    payload = utils.remove_empty_values(
+        {
             "order_amount": order_amount,
             "order_currency": order_currency,
             "order_id": order_id,
             "customer_details": utils.prepare_customer_details(customer_details),
             "order_expiry_time": order_expiry_time,
             "order_meta": order_meta,
-        },
+        }
+    )
+
+    res = service.make_post_request(
+        "orders",
+        json=payload,
         raise_for_status=True,
     )
     return res.json()
